@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quiz Website Home</title>
+<link rel="stylesheet" href="style.css">
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<header class="header">
+    <div class="site-title">
+        <span>V</span><span>I</span><span>S</span><span>I</span><span>O</span><span>N</span><span>A</span><span>R</span><span>Y</span><span> </span><span>T</span><span>I</span><span>M</span><span>E</span><span>S</span>
+    </div>
+    <div class="auth-section">
+        <!-- User Dropdown (visible when logged in) -->
+        <div id="userDropdown" class="user-dropdown">
+            <button class="user-dropdown-toggle" aria-haspopup="true" aria-expanded="false">
+                <span id="welcomeMessage"></span>
+                <svg class="dropdown-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                </svg>
+            </button>
+            <div id="dropdownMenu" class="dropdown-menu" role="menu">
+                <button class="dropdown-item" id="logoutBtn" role="menuitem">Logout</button>
+                <button class="dropdown-item" id="changePasswordBtn" role="menuitem">Change Password</button>
+            </div>
+        </div>
+        <!-- Auth Buttons (visible when logged out) -->
+        <div class="auth-buttons" id="authButtonsContainer">
+            <button class="button" id="signUpBtn">Sign Up</button>
+            <button class="button" id="loginBtn">Login</button>
+        </div>
+    </div>
+</header>
+
+<!-- New secondary navigation section below the header -->
+<div class="secondary-nav">
+    <button class="button secondary-nav-button" id="hallOfFameBtn">Hall of Fame</button>
+    <button class="button secondary-nav-button" id="openNewsletterBtn">Open Newsletter</button>
+</div>
+
+<main class="main-content">
+    <div class="hero-section">
+        <h1 class="hero-title">
+            <span>W</span><span>e</span><span>l</span><span>c</span><span>o</span><span>m</span><span>e</span><span> </span>
+            <span>t</span><span>o</span><span> </span>
+            <span>t</span><span>h</span><span>e</span><span> </span>
+            <span>Q</span><span>u</span><span>i</span><span>z</span><span>!</span>
+        </h1>
+        <p class="hero-description">Test your knowledge and join our community.</p>
+    </div>
+    <button class="button primary" id="takeQuizBtn">Take Quiz</button>
+</main>
+
+<script type="module" src="script.js"></script>
+</body>
+</html>

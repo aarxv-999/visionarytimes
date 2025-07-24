@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sign Up</title>
+<link rel="stylesheet" href="style.css">
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<header class="header">
+  <nav class="nav-links">
+    <button class="nav-button" onclick="window.location.href='index.html'">Home</button>
+  </nav>
+  <div class="site-title">
+    SIGN UP
+  </div>
+  <div class="auth-section">
+      <!-- User Dropdown (visible when logged in) -->
+      <div id="userDropdown" class="user-dropdown">
+          <button class="user-dropdown-toggle" aria-haspopup="true" aria-expanded="false">
+              <span id="welcomeMessage"></span>
+              <svg class="dropdown-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+              </svg>
+          </button>
+          <div id="dropdownMenu" class="dropdown-menu" role="menu">
+              <button class="dropdown-item" id="logoutBtn" role="menuitem">Logout</button>
+              <button class="dropdown-item" id="changePasswordBtn" role="menuitem">Change Password</button>
+          </div>
+      </div>
+      <!-- Auth Buttons (visible when logged out) -->
+      <div class="auth-buttons" id="authButtonsContainer">
+          <button class="button" id="signUpBtn">Sign Up</button>
+          <button class="button" id="loginBtn">Login</button>
+      </div>
+  </div>
+</header>
+<main class="main-content">
+  <h1 class="hero-title">Sign Up</h1>
+  <p class="hero-description">Join our community to start quizzing!</p>
+
+  <div class="form-container">
+    <form id="signupForm" class="auth-form">
+      <div class="form-group">
+        <label for="fullName">Full Name:</label>
+        <input type="text" id="fullName" name="fullName" required>
+      </div>
+      <div class="form-group">
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
+      </div>
+      <div class="form-group">
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+      </div>
+      
+      <!-- New Admin Checkbox -->
+      <div class="form-group checkbox-group">
+        <input type="checkbox" id="adminCheckbox" name="adminCheckbox">
+        <label for="adminCheckbox">Sign up as Admin</label>
+      </div>
+
+      <!-- New Admin Code Input (initially hidden) -->
+      <div class="form-group admin-code-group hidden" id="adminCodeGroup">
+        <label for="adminCode">Admin Code:</label>
+        <input type="password" id="adminCode" name="adminCode">
+      </div>
+
+      <button type="submit" class="button primary">Sign Up</button>
+      <p id="message" class="form-message"></p>
+    </form>
+  </div>
+</main>
+
+<script type="module" src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,654 @@
+@font-face {
+  font-family: "Brastika"; /* Keep the font-family name as Brastika */
+  src: url("/public/fonts/brasika-display-trial.otf") format("opentype"); /* Updated file name and format */
+  font-weight: normal; /* Assuming 'display-trial' might not have specific weights, or it's a single weight font */
+  font-style: normal;
+  font-display: swap; /* Ensures text remains visible during font load */
+}
+
+:root {
+  /* User-defined colors */
+  --color-background: #dccfbe;
+  --color-primary-text: #002142; /* Titles/headers */
+  --color-secondary-text: #253e56; /* Subtitles/content */
+  --color-accent: #c4b6a5; /* Header, Buttons, Alternate color */
+  --color-white: #ffffff;
+
+  /* Derived variables for clarity */
+  --header-bg: var(--color-accent);
+  --header-text: var(--color-white);
+  --card-bg: var(--color-white);
+
+  --button-bg: var(--color-accent);
+  --button-text: var(--color-primary-text);
+  --button-hover-bg: #b0a291;
+
+  --border-radius-base: 0.75rem;
+  --shadow-base: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+/* Basic Reset & Box Sizing */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* Keyframe Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Animation for individual letters (site title on main page) */
+@keyframes dropInLetter {
+  0% {
+    opacity: 0;
+    transform: translateY(-100px) rotateZ(-30deg) scale(0.5);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(10px) rotateZ(5deg) scale(1.1); /* Overshoot for bounce */
+  }
+  75% {
+    transform: translateY(-5px) rotateZ(-2deg) scale(0.95); /* Slight bounce back */
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) rotateZ(0deg) scale(1);
+  }
+}
+
+/* New fade out animation for page transitions */
+@keyframes fadeOutPage {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+body {
+  font-family: "Libre Baskerville", serif; /* Changed to Libre Baskerville for content */
+  line-height: 1.6;
+  color: var(--color-secondary-text);
+  background-color: var(--color-background); /* Re-added as fallback */
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  animation: fadeIn 0.8s ease-out forwards; /* Page load fade-in */
+
+  /* Background Image Styles */
+  background-image: url("./public/images/background.svg"); /* Path to your uploaded SVG */
+  background-size: cover; /* Ensures the image covers the entire background */
+  background-position: center; /* Centers the image */
+  background-repeat: no-repeat; /* Prevents the image from repeating */
+  background-attachment: fixed; /* Keeps the background fixed when scrolling */
+}
+
+/* Class to apply for page fade-out transition */
+body.page-transition-out {
+  animation: fadeOutPage 0.5s ease-out forwards;
+}
+
+/* Header Styles */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem 3rem;
+  background-color: var(--header-bg); /* Uses the accent color */
+  box-shadow: var(--shadow-base);
+  flex-wrap: wrap;
+  gap: 1rem;
+  animation: slideInUp 0.6s ease-out forwards; /* Header slide-in */
+  animation-delay: 0.2s;
+  opacity: 0; /* Start hidden for animation */
+  position: relative; /* Crucial: Creates a stacking context for its children */
+  z-index: 10; /* Ensures header content is above secondary-nav */
+}
+
+.nav-links {
+  display: flex;
+  gap: 1.25rem;
+}
+
+.auth-buttons {
+  display: flex;
+  gap: 1.25rem;
+}
+
+/* New: Auth Section Styling */
+.auth-section {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem; /* Space between email and buttons */
+  flex-wrap: wrap; /* Allow wrapping on smaller screens */
+  justify-content: flex-end; /* Align to the right */
+}
+
+.user-email-display {
+  color: var(--color-primary-text);
+  font-size: 1.1rem;
+  font-weight: 600;
+  white-space: nowrap; /* Prevent email from wrapping */
+  overflow: hidden;
+  text-overflow: ellipsis; /* Add ellipsis if email is too long */
+  max-width: 150px; /* Limit width to prevent overflow */
+}
+
+/* User Dropdown Styles */
+.user-dropdown {
+  position: relative;
+  display: none; /* Hidden by default, shown when logged in */
+}
+
+.user-dropdown-toggle {
+  background: none;
+  border: none;
+  color: var(--color-primary-text);
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: var(--border-radius-base);
+  transition: background-color 0.3s ease;
+  font-family: "Libre Baskerville", serif; /* Ensure button text is Libre Baskerville */
+  /* Removed max-width, overflow, text-overflow to allow dynamic width */
+}
+
+.user-dropdown-toggle:hover {
+  background-color: rgba(0, 33, 66, 0.1); /* Light hover for the toggle */
+}
+
+/* Style for the welcome message text itself */
+#welcomeMessage {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-family: "Brastika", serif; /* Applied Brastika font */
+}
+
+.dropdown-arrow {
+  width: 16px;
+  height: 16px;
+  transition: transform 0.3s ease;
+  flex-shrink: 0; /* Prevent arrow from shrinking */
+}
+
+.user-dropdown-toggle.active .dropdown-arrow {
+  transform: rotate(180deg);
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%; /* Position below the toggle button */
+  right: 0; /* Align to the right of the toggle */
+  border-radius: var(--border-radius-base);
+  box-shadow: var(--shadow-base);
+  min-width: 180px;
+  z-index: 1001; /* Ensure this is on top of everything else */
+  display: none; /* Hidden by default */
+  flex-direction: column;
+  padding: 0.5rem 0;
+  margin-top: 0.5rem; /* Space between toggle and menu */
+  opacity: 0; /* Start hidden */
+  transform: translateY(-10px); /* Start slightly above its final position */
+  max-height: 0; /* Start with no height for slide-down effect */
+  overflow: hidden; /* Hide content that exceeds max-height */
+  transition: opacity 0.3s ease, transform 0.3s ease, max-height 0.3s ease; /* Smooth transition for all properties */
+  background-color: var(--color-accent); /* Use accent color for dropdown background */
+}
+
+.dropdown-menu.show {
+  display: flex; /* Show when active */
+  opacity: 1; /* Fully visible */
+  transform: translateY(0); /* Slide to final position */
+  max-height: 200px; /* Sufficient height to show content, adjust if needed */
+}
+
+.dropdown-item {
+  background: none;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  text-align: left;
+  width: 100%;
+  cursor: pointer;
+  color: var(--color-primary-text); /* Changed to primary text color */
+  font-size: 1rem;
+  transition: background-color 0.2s ease;
+  font-family: "Libre Baskerville", serif; /* Ensure dropdown items are Libre Baskerville */
+}
+
+.dropdown-item:hover {
+  background-color: #a09281; /* A slightly darker shade of the accent color for hover */
+}
+
+/* Site Title Styles */
+.site-title {
+  flex-grow: 1;
+  text-align: center;
+  font-size: 2.5rem;
+  font-weight: 900;
+  color: var(--color-primary-text); /* Using primary text color */
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-family: "Brastika", serif; /* Applied Brastika font */
+  /* By default, letters are visible and no animation */
+}
+
+/* Conditional animation for the main page's site-title (VISIONARY TIMES) */
+/* This class will be added by JavaScript only on the first load */
+body.first-load .site-title span {
+  opacity: 0; /* Start hidden for animation */
+  animation: dropInLetter 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards; /* Bounce effect */
+}
+
+/* Add space for the 10th span (the space character) on main page */
+/* This also needs to be conditional to apply only when the animation is active */
+body.first-load .site-title span:nth-child(10) {
+  margin: 0 1rem; /* Adds 1rem space on both sides of the space character */
+}
+
+/* Staggered delays for VISIONARY TIMES letters */
+/* These apply only when the 'first-load' class is present */
+body.first-load .site-title span:nth-child(1) {
+  animation-delay: 1.8s;
+} /* V */
+body.first-load .site-title span:nth-child(2) {
+  animation-delay: 1.88s;
+} /* I */
+body.first-load .site-title span:nth-child(3) {
+  animation-delay: 1.96s;
+} /* S */
+body.first-load .site-title span:nth-child(4) {
+  animation-delay: 2.04s;
+} /* I */
+body.first-load .site-title span:nth-child(5) {
+  animation-delay: 2.12s;
+} /* O */
+body.first-load .site-title span:nth-child(6) {
+  animation-delay: 2.20s;
+} /* N */
+body.first-load .site-title span:nth-child(7) {
+  animation-delay: 2.28s;
+} /* A */
+body.first-load .site-title span:nth-child(8) {
+  animation-delay: 2.36s;
+} /* R */
+body.first-load .site-title span:nth-child(9) {
+  animation-delay: 2.44s;
+} /* Y */
+body.first-load .site-title span:nth-child(10) {
+  animation-delay: 2.52s;
+} /* Space */
+body.first-load .site-title span:nth-child(11) {
+  animation-delay: 2.60s;
+} /* T */
+body.first-load .site-title span:nth-child(12) {
+  animation-delay: 2.68s;
+} /* I */
+body.first-load .site-title span:nth-child(13) {
+  animation-delay: 2.76s;
+} /* M */
+body.first-load .site-title span:nth-child(14) {
+  animation-delay: 2.84s;
+} /* E */
+body.first-load .site-title span:nth-child(15) {
+  animation-delay: 2.92s;
+} /* S */
+
+/* Secondary Navigation Section (new) */
+.secondary-nav {
+  display: flex;
+  width: 100%;
+  margin-top: 0.5rem; /* Space below the main header */
+  padding: 0 3rem; /* Match header padding for alignment */
+  gap: 1rem; /* Space between the two buttons */
+  box-shadow: var(--shadow-base); /* Add shadow for depth */
+  background-color: var(--color-accent); /* Use accent color for this bar */
+  position: relative; /* Creates a stacking context */
+  z-index: 5; /* Ensures this is below the header's content */
+}
+
+.secondary-nav-button {
+  flex: 1; /* Make buttons take equal width */
+  padding: 0.75rem 1.5rem; /* Thin and rectangular */
+  font-size: 1.2rem; /* Large text */
+  font-weight: 700;
+  text-transform: uppercase; /* Optional: for a more prominent look */
+  border-radius: 0.5rem; /* Slightly rounded corners */
+  border: none; /* Remove default button border */
+  background-color: var(--color-background); /* Use background color for button fill */
+  color: var(--color-primary-text); /* Dark text on light button */
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.secondary-nav-button:hover {
+  background-color: #c0b09f; /* Slightly darker hover for the button */
+  transform: translateY(-2px); /* Subtle lift on hover */
+}
+
+/* Unified Button Styles for ALL buttons (excluding secondary-nav-button which has its own) */
+.button,
+.nav-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem 1.5rem;
+  font-size: 1.25rem;
+  font-weight: 700;
+  border-radius: var(--border-radius-base);
+  cursor: pointer;
+  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease, transform 0.3s ease, box-shadow 0.3s
+    ease; /* Increased transform transition for smoother scaling */
+  text-decoration: none;
+  text-align: center;
+  border: 2px solid var(--color-background); /* Border using main background color */
+  background-color: var(--button-bg);
+  color: var(--button-text);
+  min-width: 120px;
+  animation: scaleIn 0.5s ease-out forwards; /* Button scale-in */
+  opacity: 0; /* Start hidden for animation */
+  font-family: "Libre Baskerville", serif; /* Applied new font */
+}
+
+/* Adjustments for nav buttons to be slightly smaller in the header */
+.nav-button {
+  padding: 0.75rem 1.25rem;
+  font-size: 1rem;
+  font-weight: 500;
+  min-width: unset;
+}
+
+/* Staggered animation delays for all elements */
+.main-content .button.primary {
+  animation-delay: 1.2s;
+}
+
+/* Hover for all buttons (default, subtle expand) */
+.button:hover,
+.nav-button:hover {
+  background-color: var(--button-hover-bg);
+  border-color: var(--button-hover-bg); /* Border also changes on hover */
+  transform: translateY(-3px) scale(1.02); /* Subtle expand */
+  box-shadow: 0 12px 20px -5px rgba(0, 0, 0, 0.2);
+}
+
+/* Specific hover for the "Take Quiz" button */
+/* Increased specificity to ensure this rule overrides the general .button:hover */
+.main-content .button.primary:hover {
+  transform: scale(1.5); /* 150% larger */
+  /* Keep other hover properties like background-color, border-color, box-shadow from .button:hover */
+}
+
+/* Main Content Styles */
+.main-content {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 1.5rem;
+  text-align: center;
+}
+
+.hero-section {
+  margin-bottom: 3rem;
+  max-width: 900px;
+  width: 100%;
+  padding: 2rem 0;
+}
+
+.hero-title {
+  font-size: 3.5rem;
+  font-weight: 800;
+  margin-bottom: 1rem;
+  color: var(--color-primary-text);
+  line-height: 1.1;
+  animation: slideInUp 0.7s ease-out forwards;
+  animation-delay: 0.4s;
+  opacity: 0;
+  display: inline-block; /* Allow hover to work on the whole block */
+  font-family: "Brastika", serif; /* Applied Brastika font */
+}
+
+.hero-title span {
+  display: inline-block; /* Make each letter a block for animation */
+}
+
+.hero-description {
+  font-size: 1.35rem;
+  color: var(--color-secondary-text);
+  margin-bottom: 2rem;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  animation: slideInUp 0.7s ease-out forwards;
+  animation-delay: 0.5s;
+  opacity: 0;
+}
+
+/* Form Styles */
+.form-container {
+  background-color: var(--card-bg);
+  padding: 2.5rem;
+  border-radius: var(--border-radius-base);
+  box-shadow: var(--shadow-base);
+  max-width: 450px;
+  width: 100%;
+  margin-top: 2rem;
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.form-group {
+  text-align: left;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: var(--color-primary-text);
+}
+
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group input[type="password"] {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  border: 1px solid #ccc;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  color: var(--color-secondary-text);
+  background-color: var(--color-white);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px rgba(196, 182, 165, 0.3); /* Accent color with transparency */
+}
+
+/* New styles for admin checkbox and input */
+.checkbox-group {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.checkbox-group input[type="checkbox"] {
+  width: auto; /* Allow checkbox to be its natural size */
+  margin-bottom: 0; /* Remove bottom margin */
+}
+
+.admin-code-group {
+  transition: max-height 0.3s ease-out, opacity 0.3s ease-out;
+  max-height: 100px; /* Max height when visible */
+  opacity: 1;
+  overflow: hidden;
+}
+
+.admin-code-group.hidden {
+  max-height: 0;
+  opacity: 0;
+  margin-top: 0; /* Collapse margin when hidden */
+  margin-bottom: 0;
+}
+
+.auth-form .button.primary {
+  margin-top: 1rem;
+  width: 100%;
+  padding: 1rem;
+  font-size: 1.1rem;
+}
+
+.form-message {
+  margin-top: 1rem;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.form-message.success {
+  color: green;
+}
+
+.form-message.error {
+  color: red;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem 1.5rem;
+    gap: 0.75rem;
+  }
+  /* Adjust secondary nav for smaller screens */
+  .secondary-nav {
+    flex-direction: column;
+    padding: 0 1.5rem; /* Adjust padding */
+    gap: 0.5rem; /* Smaller gap */
+  }
+  .secondary-nav-button {
+    width: 100%; /* Full width on small screens */
+    font-size: 1rem; /* Smaller font */
+  }
+  .nav-links,
+  .auth-buttons {
+    width: 100%;
+    justify-content: center;
+    gap: 0.75rem;
+  }
+  .site-title {
+    font-size: 1.8rem; /* Adjust font size for smaller screens */
+    margin-top: 1rem; /* Add some space above it */
+    order: -1; /* Move it to the top in column layout */
+  }
+  .hero-title {
+    font-size: 2.75rem;
+  }
+  .hero-description {
+    font-size: 1.15rem;
+  }
+  .main-content {
+    padding: 2rem 1rem;
+  }
+  .button,
+  .nav-button {
+    width: auto;
+    min-width: unset;
+  }
+  .form-container {
+    padding: 1.5rem;
+  }
+  .auth-section {
+    width: 100%;
+    justify-content: center; /* Center content in auth section on small screens */
+    margin-top: 0.5rem;
+  }
+  .user-dropdown {
+    width: 100%;
+    text-align: center;
+  }
+  .user-dropdown-toggle {
+    justify-content: center;
+    width: 100%;
+  }
+  .dropdown-menu {
+    position: static; /* Allow it to flow naturally in column layout */
+    width: 100%;
+    margin-top: 0.25rem;
+    box-shadow: none; /* Remove shadow if it's not floating */
+    border: 1px solid #eee; /* Add a subtle border */
+  }
+}
+
+@media (max-width: 480px) {
+  .header {
+    padding: 0.75rem 1rem;
+  }
+  .nav-links,
+  .auth-buttons {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .nav-button,
+  .button {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    font-size: 1rem;
+  }
+  .site-title {
+    font-size: 1.5rem;
+    letter-spacing: 0.05em;
+  }
+  .hero-title {
+    font-size: 2.25rem;
+  }
+  .hero-description {
+    font-size: 1rem;
+  }
+}
